@@ -1,0 +1,152 @@
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* -------------------------
+       MOBILE NAV
+    ------------------------- */
+
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".desktop-nav");
+
+    if (toggle && nav) {
+
+        const closeMobileMenu = () => {
+
+            nav.classList.remove("mobile-open");
+            document.body.classList.remove("menu-open");
+
+        };
+
+        toggle.addEventListener("click", () => {
+
+            nav.classList.toggle("mobile-open");
+            document.body.classList.toggle("menu-open", nav.classList.contains("mobile-open"));
+
+        });
+
+        nav.querySelectorAll("a").forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                closeMobileMenu();
+
+            });
+
+        });
+
+        // Chiude il pannello quando l'utente prova a scorrere la pagina.
+        window.addEventListener("scroll", () => {
+
+            if (nav.classList.contains("mobile-open")) {
+
+                closeMobileMenu();
+
+            }
+
+        }, { passive: true });
+
+    }
+
+
+    /* -------------------------
+       HEADER ON SCROLL
+    ------------------------- */
+
+    const header = document.querySelector(".header");
+
+    window.addEventListener("scroll", () => {
+
+        if (window.scrollY > 80) {
+
+            header.classList.add("scrolled");
+
+        } else {
+
+            header.classList.remove("scrolled");
+
+        }
+
+    });
+
+
+    /* -------------------------
+       SIMPLE REVEAL
+    ------------------------- */
+
+    const elements = document.querySelectorAll(
+        ".product-card, .food-item, .values-list article"
+    );
+
+    const observer = new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("visible");
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.15
+        }
+    );
+
+    elements.forEach(element => {
+
+        element.classList.add("reveal");
+
+        observer.observe(element);
+
+    });
+
+
+    /* -------------------------
+       OFFER ROTATOR
+    ------------------------- */
+
+    const offerCard = document.querySelector(".offer-content");
+
+    if (offerCard) {
+
+        const offers = Array.from(offerCard.querySelectorAll(".offer-slide"));
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let activeOffer = 0;
+        let offerTimer;
+
+        const showOffer = (index) => {
+            offers[activeOffer].classList.remove("is-active");
+            offers[activeOffer].setAttribute("aria-hidden", "true");
+            activeOffer = (index + offers.length) % offers.length;
+            offers[activeOffer].classList.add("is-active");
+            offers[activeOffer].setAttribute("aria-hidden", "false");
+        };
+
+        const previous = offerCard.querySelector(".offer-nav-prev");
+        const next = offerCard.querySelector(".offer-nav-next");
+        [previous, next].forEach((button) => button?.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            showOffer(activeOffer + (button === next ? 1 : -1));
+            if (offerTimer) {
+                window.clearInterval(offerTimer);
+                startOfferTimer();
+            }
+        }));
+
+        const startOfferTimer = () => {
+            offerTimer = window.setInterval(() => {
+                showOffer(activeOffer + 1);
+            }, 6000);
+        };
+
+        if (offers.length > 1 && !reduceMotion.matches) {
+            startOfferTimer();
+        }
+
+    }
+
+});
