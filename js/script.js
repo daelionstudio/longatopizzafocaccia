@@ -9,19 +9,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (toggle && nav) {
 
+        const menuIsOpen = () => nav.classList.contains("mobile-open");
+
+        const updateMenuState = () => {
+            const isOpen = menuIsOpen();
+            toggle.setAttribute("aria-expanded", String(isOpen));
+            toggle.setAttribute("aria-label", isOpen ? "Chiudi menu" : "Apri menu");
+            document.body.classList.toggle("menu-open", isOpen);
+        };
+
         const closeMobileMenu = () => {
-
             nav.classList.remove("mobile-open");
-            document.body.classList.remove("menu-open");
-
+            updateMenuState();
         };
 
         toggle.addEventListener("click", () => {
-
-            nav.classList.toggle("mobile-open");
-            document.body.classList.toggle("menu-open", nav.classList.contains("mobile-open"));
-
+            nav.classList.toggle("mobile-open", !menuIsOpen());
+            updateMenuState();
         });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape" && menuIsOpen()) {
+                closeMobileMenu();
+                toggle.focus();
+            }
+        });
+
+        updateMenuState();
 
         nav.querySelectorAll("a").forEach(link => {
 
@@ -116,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         let activeOffer = 0;
         let offerTimer;
+        let isPaused = reduceMotion.matches;
 
         const showOffer = (index) => {
             offers[activeOffer].classList.remove("is-active");
@@ -127,25 +142,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const previous = offerCard.querySelector(".offer-nav-prev");
         const next = offerCard.querySelector(".offer-nav-next");
+        const toggle = offerCard.querySelector(".offer-nav-toggle");
+
+        const stopOfferTimer = () => {
+            if (offerTimer) {
+                window.clearInterval(offerTimer);
+                offerTimer = undefined;
+            }
+        };
+
+        const updateToggle = () => {
+            toggle?.setAttribute("aria-pressed", String(isPaused));
+            if (toggle) {
+                toggle.setAttribute("aria-label", isPaused ? "Riprendi il carosello" : "Metti in pausa il carosello");
+            }
+        };
+
+        const startOfferTimer = () => {
+            stopOfferTimer();
+            if (offers.length > 1 && !isPaused) {
+                offerTimer = window.setInterval(() => {
+                    showOffer(activeOffer + 1);
+                }, 6000);
+            }
+        };
+
         [previous, next].forEach((button) => button?.addEventListener("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
             showOffer(activeOffer + (button === next ? 1 : -1));
-            if (offerTimer) {
-                window.clearInterval(offerTimer);
-                startOfferTimer();
-            }
+            startOfferTimer();
         }));
 
-        const startOfferTimer = () => {
-            offerTimer = window.setInterval(() => {
-                showOffer(activeOffer + 1);
-            }, 6000);
-        };
-
-        if (offers.length > 1 && !reduceMotion.matches) {
+        toggle?.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            isPaused = !isPaused;
+            updateToggle();
             startOfferTimer();
-        }
+        });
+
+        updateToggle();
+        startOfferTimer();
 
     }
 

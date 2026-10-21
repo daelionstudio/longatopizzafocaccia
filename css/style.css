@@ -470,6 +470,17 @@ h2 {
     inset: 0;
 }
 
+.offer-link {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+}
+
+.offer-link:focus-visible {
+    outline: 3px solid white;
+    outline-offset: -6px;
+}
+
 .offer-nav {
     position: absolute;
     z-index: 2;
@@ -478,9 +489,9 @@ h2 {
     width: 44px;
     height: 44px;
     place-items: center;
-    border: 1px solid rgba(255,255,255,.65);
-    border-radius: 50%;
-    background: rgba(0,0,0,.35);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: #fff;
     font: inherit;
     font-size: 32px;
@@ -490,13 +501,85 @@ h2 {
     transition: background .2s ease;
 }
 
+.offer-nav-toggle {
+    top: 16px;
+    right: 16px;
+    left: auto;
+    bottom: auto;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,.65);
+    border-radius: 50%;
+    background: rgba(0,0,0,.35);
+    transform: none;
+}
+
+.offer-nav-toggle::before {
+    content: "";
+    width: 4px;
+    height: 16px;
+    border-right: 3px solid currentColor;
+    border-left: 3px solid currentColor;
+}
+
+.offer-nav-toggle[aria-pressed="true"]::before {
+    width: 0;
+    height: 0;
+    margin-left: 3px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 0;
+    border-left: 12px solid currentColor;
+}
+
 .offer-nav:hover,
 .offer-nav:focus-visible {
     background: rgba(0,0,0,.7);
 }
 
-.offer-nav-prev { left: 16px; }
-.offer-nav-next { right: 16px; }
+.offer-nav-prev,
+.offer-nav-next {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+
+.offer-nav-prev:hover,
+.offer-nav-next:hover,
+.offer-nav-prev:focus-visible,
+.offer-nav-next:focus-visible {
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+
+.offer-nav-prev:focus-visible,
+.offer-nav-next:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+.offer-nav-prev::before,
+.offer-nav-next::before {
+    content: "";
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-top: 4px solid currentColor;
+    border-right: 4px solid currentColor;
+    border-radius: 0;
+}
+
+.offer-nav-prev::before { transform: rotate(-135deg); }
+.offer-nav-next::before { transform: rotate(45deg); }
+.offer-nav-prev { left: 20px; }
+.offer-nav-next { right: 20px; }
 
 .offer-slide {
     position: absolute;
@@ -630,9 +713,7 @@ h2 {
 .promo-strip {
     padding: 105px 7vw;
 
-    background:
-        linear-gradient(135deg, rgba(183,52,30,.9), rgba(21,18,16,.96)),
-        url("../img/aperitivo.jpg") center/cover;
+    background: linear-gradient(135deg, rgba(183,52,30,.9), rgba(21,18,16,.96));
     color: white;
 
     display: grid;
@@ -1539,6 +1620,18 @@ h2 {
         background-position: center top;
         background-size: 100% auto;
         background-color: var(--cream);
+    }
+
+    .product-card.orange-card .offer-nav-toggle {
+        top: 12px;
+        right: 12px;
+        left: auto;
+        bottom: auto;
+        z-index: 3;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        transform: none;
     }
 
     .product-card.orange-card .offer-slide::before {
