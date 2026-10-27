@@ -1580,17 +1580,51 @@ h2 {
         background: var(--black);
     }
 
+    .header.scrolled .menu-toggle span {
+        background: #fff;
+    }
+
     .header {
         height: 75px;
         padding: 0 22px;
+    }
+
+    .home-page .header {
+        position: fixed;
+        top: 0;
+        color: #fff;
+        background: rgba(24, 21, 18, .94);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    .home-page .header.scrolled {
+        animation: none;
+    }
+
+    .home-page .header .logo {
+        color: #fff;
+    }
+
+    .home-page .header .menu-toggle span {
+        background: #fff;
     }
 
     .hero {
         min-height: 820px;
     }
 
+    .home-page .hero-overlay {
+        background: linear-gradient(
+            to top,
+            rgba(15, 12, 10, .68) 0%,
+            rgba(15, 12, 10, .36) 50%,
+            rgba(15, 12, 10, 0) 76%
+        );
+    }
+
     .hero-content {
-        padding: 0 22px 100px;
+        padding: 0 22px 45px;
     }
 
     .hero h1 {
@@ -1868,7 +1902,7 @@ h2 {
     }
 
     .hero-content {
-        padding-bottom: 80px;
+        padding-bottom: 35px;
     }
 
     .hero-actions {
