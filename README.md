@@ -1,4 +1,4 @@
-# Longato Pizza Focaccia - Daelion Studio
+# Longato Pizza Focaccia
 
 Sito statico per **Longato Pizza Focaccia | Pizzeria Padova**.
 
